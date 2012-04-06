@@ -42,7 +42,8 @@
  STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE 
  POSSIBILITY OF SUCH DAMAGE. 
   
- Copyright (C) 2011 Apple Inc. All Rights Reserved. 
+ Copyright (C) 2011 Apple Inc. All Rights Reserved.
+ Edited  by: Aldrin Abastillas, 2012
   
  */
 
@@ -59,7 +60,6 @@ enum
 @synthesize delegate, takePictureButton, startStopButton,
             cancelButton, timedButton,
             tickTimer, cameraTimer,
-            sendButton,                      //mine
             imagePickerController;
 
 

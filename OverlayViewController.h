@@ -42,7 +42,8 @@
  STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE 
  POSSIBILITY OF SUCH DAMAGE. 
   
- Copyright (C) 2011 Apple Inc. All Rights Reserved. 
+ Copyright (C) 2011 Apple Inc. All Rights Reserved.
+ Edited  by: Aldrin Abastillas, 2012
   
  */
 
@@ -76,7 +77,7 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *startStopButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *timedButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *cancelButton;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *sendButton;      // mine
+
 
 @property (nonatomic, retain) NSTimer *tickTimer;
 @property (nonatomic, retain) NSTimer *cameraTimer;

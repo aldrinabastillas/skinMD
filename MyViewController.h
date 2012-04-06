@@ -43,127 +43,50 @@
  POSSIBILITY OF SUCH DAMAGE. 
   
  Copyright (C) 2011 Apple Inc. All Rights Reserved. 
+ Edited  by: Aldrin Abastillas, 2012
   
  */
 
 #import <UIKit/UIKit.h>
 #import "OverlayViewController.h"
 
-#pragma mark -
-#pragma mark MyViewController
-
-// ******************************* MyViewController ********************  
-
 @interface MyViewController : UIViewController <UIImagePickerControllerDelegate,
-                                                OverlayViewControllerDelegate,
-                                                UITextFieldDelegate>
+                                                OverlayViewControllerDelegate>
+                    
 {
-  
-    UIImageView *imageView;
+    UIImageView         *imageView;
     UIToolbar *myToolbar;
     
     OverlayViewController *overlayViewController; // the camera custom overlay view
 
     NSMutableArray *capturedImages; // the list of images captures from the camera (either 1 or multiple)
- 
-            
-// ******************************* GetController ********************    
-    UITextField *               _geturlText;
-    UIImageView *               _getimageView;
-    UILabel *                   _getstatusLabel;
-    UIActivityIndicatorView *   _getactivityIndicator;
-    UIBarButtonItem *           _getOrCancelButton;
     
-    // NSString interface
+    NSString        *imageName;
+    NSTimer         *stopWatchTimer; 
+    NSDate          *startDate; 
+
     NSURLConnection *           _connection;
     NSString *                  _filePath;
-    NSOutputStream *            _fileStream;    
-    NSRange *                   _foundRange;
-    
-    
-// ******************************* PostController ********************
-    UITextField *               _posturlText;
-    UILabel *                   _poststatusLabel;
-    UIActivityIndicatorView *   _postactivityIndicator;
-    UIBarButtonItem *           _cancelButton;
-    
-    NSURLConnection *           _postconnection;
-    NSData *                    _bodyPrefixData;
-    NSInputStream *             _postfileStream;
-    NSData *                    _bodySuffixData;
-    NSOutputStream *            _producerStream;
-    NSInputStream *             _consumerStream;
-    const uint8_t *             _buffer;
-    uint8_t *                   _bufferOnHeap;
-    size_t                      _bufferOffset;
-    size_t                      _bufferLimit;
+    NSOutputStream *            _fileStream;
+
 }
 
-#pragma mark Properties and Actions 
+@property (nonatomic, retain) OverlayViewController                *overlayViewController;
 
-//                      ****** Properties and Actions *********
+@property (nonatomic, retain) IBOutlet UIImageView                 *imageView;
+@property (nonatomic, retain) IBOutlet UIToolbar                   *myToolbar;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *   activityIndicator;
+@property (nonatomic, retain) NSMutableArray                       *capturedImages;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem             *sendButton;
+@property (nonatomic, retain) IBOutlet UILabel                     *stopWatchLabel;
+@property (nonatomic, retain) IBOutlet UILabel                     *statusLabel;
 
 
-// ******************************* MyViewController ********************  
-
-@property (nonatomic, retain) IBOutlet UIImageView *               imageView;
-@property (nonatomic, retain) IBOutlet UIToolbar *                 myToolbar;
-@property (nonatomic, retain) OverlayViewController *              overlayViewController;
-@property (nonatomic, retain) NSMutableArray *                     capturedImages;
 
 // toolbar buttons
 - (IBAction)photoLibraryAction:(id)sender;
 - (IBAction)cameraAction:(id)sender;
-
-
-
-// ******************************* GetController ********************
-
-@property (nonatomic, retain) IBOutlet UITextField *               geturlText;
-@property (nonatomic, retain) IBOutlet UIImageView *               getimageView;
-@property (nonatomic, retain) IBOutlet UILabel *                   getstatusLabel;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *   getactivityIndicator;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *           getOrCancelButton;
-
-// NSString interface
-@property (nonatomic, readonly) BOOL              isReceiving;
-@property (nonatomic, retain)   NSURLConnection * getConnection; // **
-@property (nonatomic, copy)     NSString *        filePath;
-@property (nonatomic, retain)   NSOutputStream *  getFileStream;  // **
-@property                       NSRange *         foundRange;
-
-// toolbar buttons
-- (IBAction)getOrCancelAction:(id)sender;
-
-
-
-
-
-// ******************************* PostController ********************
-
-@property (nonatomic, retain) IBOutlet UITextField *               posturlText;
-@property (nonatomic, retain) IBOutlet UILabel *                   poststatusLabel;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *   postactivityIndicator;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *           postcancelButton;
-
-// post controller interface
-@property (nonatomic, readonly) BOOL              isSending;
-@property (nonatomic, retain)   NSURLConnection * postConnection;  // **
-@property (nonatomic, copy)     NSData *          bodyPrefixData;
-@property (nonatomic, retain)   NSInputStream *   postFileStream;  // **
-@property (nonatomic, copy)     NSData *          bodySuffixData;
-@property (nonatomic, retain)   NSOutputStream *  producerStream;
-@property (nonatomic, retain)   NSInputStream *   consumerStream;
-@property (nonatomic, assign)   const uint8_t *   buffer;
-@property (nonatomic, assign)   uint8_t *         bufferOnHeap;
-@property (nonatomic, assign)   size_t            bufferOffset;
-@property (nonatomic, assign)   size_t            bufferLimit;
-
-- (IBAction)sendAction:(UIView *)sender;
-- (IBAction)cancelAction:(id)sender;
-
-
+- (IBAction)sendImage:(id)sender;
 
 @end
-
 

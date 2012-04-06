@@ -14,21 +14,23 @@
 	UITabBarController *    _tabs;
     
     NSInteger               _networkingCount;
+    NSTimeInterval          _time;
 
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *           window;
+@property (nonatomic, retain) IBOutlet UITabBarController * tabs;
 
 + (AppDelegate *)sharedAppDelegate;
 
 - (NSString *)pathForTestImage:(NSUInteger)imageNumber;
 
-//- (NSString *)pathForTestImage;
+- (NSString *)pathForTestImage;
 - (NSString *)pathForTemporaryFileWithPrefix:(NSString *)prefix;
 
 - (NSURL *)smartURLForString:(NSString *)str;
 
-- (void)didStartNetworking;
+//- (void)didStartNetworking;
 - (void)didStopNetworking;
 
 @end
