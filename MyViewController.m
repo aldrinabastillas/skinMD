@@ -52,8 +52,10 @@
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
 
+
 @interface MyViewController ()
 
+@property (nonatomic, readonly) BOOL              isReceiving;
 @property (nonatomic, retain)   NSURLConnection * connection;
 @property (nonatomic, copy)     NSString *        filePath;
 @property (nonatomic, retain)   NSOutputStream *  fileStream;
@@ -76,20 +78,14 @@
     self.overlayViewController.delegate = self;
     
     self.capturedImages = [NSMutableArray array];
-    self.sendButton.possibleTitles = [NSSet setWithObjects:@"Send", @"Sent !", nil];
-    self.sendButton.title = @"Send";
+    self.sendButton.possibleTitles = [NSSet setWithObjects:@"Send", @"Sent !", @"Cancel", nil];
+    self.sendButton.enabled = NO;
+    self.clearButton.enabled = NO;
     self.stopWatchLabel.text = @"";
     self.statusLabel.text = @"To start, take a picture using the camera or select a picture from the roll";
     self.activityIndicator.hidden = YES;
+    self.imageView.image = nil;
 
-//    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-//    {
-//        // camera is not on this device, don't show the camera button
-//        NSMutableArray *toolbarItems = [NSMutableArray arrayWithCapacity:self.myToolbar.items.count];
-//        [toolbarItems addObjectsFromArray:self.myToolbar.items];
-//        [toolbarItems removeObjectAtIndex:2];
-//        [self.myToolbar setItems:toolbarItems animated:NO];
-//    }
 }
 
 - (void)viewDidUnload
@@ -99,6 +95,7 @@
     self.overlayViewController = nil;
     self.capturedImages = nil;
     self.sendButton = nil;
+    self.clearButton = nil;
     self.stopWatchLabel = nil;
     self.statusLabel = nil;
     self.activityIndicator = nil;
@@ -111,6 +108,7 @@
     [overlayViewController release];
 	[capturedImages release];
     [sendButton release];
+    [clearButton release];
     [stopWatchLabel release];
     [statusLabel release];
     [activityIndicator release];
@@ -121,6 +119,7 @@
 #pragma mark * View controller boilerplate
 
 @synthesize sendButton           = sendButton;
+@synthesize clearButton          = clearButton;
 @synthesize stopWatchLabel       = stopWatchLabel;
 @synthesize statusLabel          = statusLabel;
 @synthesize activityIndicator    = activityIndicator;
@@ -128,6 +127,11 @@
 
 #pragma mark -
 #pragma mark Toolbar Actions
+
+- (IBAction)clear:(id)sender
+{
+    [self viewDidLoad];
+}
 
 - (void)showImagePicker:(UIImagePickerControllerSourceType)sourceType
 {
@@ -147,21 +151,40 @@
 - (IBAction)photoLibraryAction:(id)sender
 {   
 	[self showImagePicker:UIImagePickerControllerSourceTypePhotoLibrary];
+    sleep(0.4);
+    self.sendButton.enabled = YES;
+    self.sendButton.title = @"Send";     
     self.statusLabel.text = @"Hit Send !";
+    self.clearButton.enabled = YES;
 }
 
 - (IBAction)cameraAction:(id)sender
 {
-//    [self showImagePicker:UIImagePickerControllerSourceTypeCamera];
+//    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+//    {
+//        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+//        imagePickerController.delegate = self;
+//        imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+//        [self presentModalViewController:imagePickerController animated:YES];
+//        [imagePickerController release];
+//        
+//        sleep(0.4);
+//        self.sendButton.enabled = YES;
+//        self.sendButton.title = @"Send";         
+//        self.statusLabel.text = @"Hit Send !";
+//        self.clearButton.enabled = YES;
+//    }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
     {
-        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-        imagePickerController.delegate = self;
-        imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-        [self presentModalViewController:imagePickerController animated:YES];
-        [imagePickerController release];
+        [self showImagePicker:UIImagePickerControllerSourceTypeCamera];
+        
+        sleep(0.4);
+        self.sendButton.enabled = YES;
+        self.sendButton.title = @"Send";         
         self.statusLabel.text = @"Hit Send !";
+        self.clearButton.enabled = YES;
+        
     }
     else
     {
@@ -177,11 +200,13 @@
 
 - (IBAction)sendImage:(id)sender
 {   
-    if (self.imageView.image != nil){
-    
-    imageName = [NSString stringWithFormat:@"imageTime_%qu.jpg" , [[NSDate date] timeIntervalSince1970]];
+    self.sendButton.enabled = NO;
+    self.clearButton.enabled = NO;
     [self.activityIndicator startAnimating];
-    self.statusLabel.text = @""; 
+    self.statusLabel.text = @"";
+
+    if (self.imageView.image != nil){
+    imageName = [NSString stringWithFormat:@"imageTime_%qu.jpg" , [[NSDate date] timeIntervalSince1970]];
     
     // Create the stop watch timer that fires every 0.1 ms
     startDate = [[NSDate date]retain];
@@ -189,25 +214,43 @@
                                                       target:self
                                                     selector:@selector(updateTimer)
                                                     userInfo:nil
-                                                     repeats:YES];
-    
+                                                     repeats:YES];   
+        
+    NSData * imageData = UIImageJPEGRepresentation(self.imageView.image, 0.25);
+        
     NSURL *postURL = [NSURL URLWithString:@"http://li245-100.members.linode.com/upload"];
-    NSData * imageData = UIImageJPEGRepresentation(self.imageView.image, 1.0);
-    
+            
+                  
     __block ASIFormDataRequest * postRequest = [ASIFormDataRequest requestWithURL:postURL];
     
     [postRequest appendPostData:imageData];    
     [postRequest setRequestMethod:@"POST"];
     [postRequest setData:imageData withFileName: imageName andContentType:@"image/jpeg" forKey:@"photo"];    
     [postRequest setDelegate:self];
-    [postRequest startAsynchronous];
-    
+        
     [postRequest setCompletionBlock:^{
         self.sendButton.title = @"Sent !";  
         
         [self getResult];
         
     }];
+        
+    [postRequest setFailedBlock:^{
+        NSError *error = [postRequest error];
+        self.statusLabel.text = [error localizedDescription];
+        [stopWatchTimer invalidate];
+        stopWatchTimer = nil;
+        [self updateTimer]; 
+        
+        self.sendButton.enabled = YES;
+        self.clearButton.enabled = YES;
+        self.sendButton.title = @"Send";
+        [self.activityIndicator stopAnimating];
+        }];
+        
+           
+    [postRequest startAsynchronous]; 
+        
     }
     else{
         UIAlertView *newView = [[UIAlertView alloc] initWithTitle:nil 
@@ -217,7 +260,7 @@
                                                     otherButtonTitles:nil];
         [newView show];
         [newView release];        
-    }    
+    }  
 }
 
 - (void)updateTimer
@@ -227,7 +270,7 @@
     NSDate *timerDate = [NSDate dateWithTimeIntervalSince1970:timeInterval];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"ss.SSS"];
+    [dateFormatter setDateFormat:@"sss.SSS"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0.0]];
     NSString *timeString=[dateFormatter stringFromDate:timerDate];
     self.stopWatchLabel.text = [timeString stringByAppendingString:@" s"];
@@ -243,44 +286,47 @@
 @synthesize filePath      = _filePath;
 
 
+- (BOOL)isReceiving
+{
+    return (self.connection != nil);
+}
+
+
 -(void)getResult{
     
-//    NSString *getString = [NSString stringWithFormat:@"http://li245-100.members.linode.com/mobile/results/%s", imageName];
-//    NSURL *getURL = [NSURL URLWithString:getString];
-    NSURL *getURL = [NSURL URLWithString:@"http://thewallmachine.com/files/1323133721.jpg"];
+    NSString *getString = [@"http://li245-100.members.linode.com/mobile/results/" stringByAppendingString: imageName];
+    NSURL *getURL = [NSURL URLWithString:getString];
     
- 
-    NSURLRequest *      request;
-
+//    // testing URL until algorithm is finalized on the server
+//    NSURL *getURL = [NSURL URLWithString:@"http://thewallmachine.com/files/1323133721.jpg"];
+    
+    NSURLRequest * request;
+    
     assert(self.connection == nil);         // don't tap receive twice in a row!
     assert(self.fileStream == nil);         // ditto
     assert(self.filePath == nil);           // ditto
     
-        // Open a stream for the file we're going to receive into.
+    // Open a stream for the file we're going to receive into.
         
-        self.filePath = [[AppDelegate sharedAppDelegate] pathForTemporaryFileWithPrefix:@"Get"];
-        assert(self.filePath != nil);
+    self.filePath = [[AppDelegate sharedAppDelegate] pathForTemporaryFileWithPrefix:@"Get"];
+    assert(self.filePath != nil);
         
-        self.fileStream = [NSOutputStream outputStreamToFileAtPath:self.filePath append:NO];
-        assert(self.fileStream != nil);
+    self.fileStream = [NSOutputStream outputStreamToFileAtPath:self.filePath append:NO];
+    assert(self.fileStream != nil);
         
-        [self.fileStream open];
+    [self.fileStream open];
         
-        // Open a connection for the URL.
+    // Open a connection for the URL.
         
-        request = [NSURLRequest requestWithURL:getURL];
-        assert(request != nil);
+    request = [NSURLRequest requestWithURL:getURL];
+    assert(request != nil);
         
-        self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-        assert(self.connection != nil);
-        
-        // Tell the UI we're receiving.
-        
-//        [self _receiveDidStart];
+    self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    assert(self.connection != nil);  
     
 }
 
-- (void)_receiveDidStopWithStatus:(NSString *)statusString
+- (void)_receiveDidStopWithStatus:(NSString *)statusString   // ***** last get method block 
 {
     
     [stopWatchTimer invalidate];
@@ -291,11 +337,15 @@
         assert(self.filePath != nil);
         
         self.imageView.image = [UIImage imageWithContentsOfFile:self.filePath];
+//        self.statusLabel.text = self.filePath;
+//        NSLog(self.filePath);
     }
-    self.statusLabel.text = statusString;
+//
+//    self.statusLabel.text = statusString;
     self.sendButton.title = @"Send";
+    self.sendButton.enabled = NO;
+    self.clearButton.enabled = YES;
     [self.activityIndicator stopAnimating];
-    //    [[AppDelegate sharedAppDelegate] didStopNetworking];
     
 }
 
@@ -360,8 +410,10 @@
 // We shut down the connection and display the failure.  Production quality code 
 // would either display or log the actual error.
 {
-    assert(theConnection == self.connection);    
-    [self _stopReceiveWithStatus:@"Connection failed"];
+    assert(theConnection == self.connection);
+//    [self _stopReceiveWithStatus: [error localizedFailureReason]];
+    [self _stopReceiveWithStatus:@" Connection failed"];
+
 }
 
 
@@ -388,8 +440,10 @@
         [self.fileStream close];
         self.fileStream = nil;
     }
-    [self _receiveDidStopWithStatus:statusString];
+    
+    [self _receiveDidStopWithStatus:statusString];   // ****** goes to last method block
     self.filePath = nil;
+    
 }
 
 

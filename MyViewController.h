@@ -75,11 +75,13 @@
 
 @property (nonatomic, retain) IBOutlet UIImageView                 *imageView;
 @property (nonatomic, retain) IBOutlet UIToolbar                   *myToolbar;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *   activityIndicator;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView     *activityIndicator;
 @property (nonatomic, retain) NSMutableArray                       *capturedImages;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem             *sendButton;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem             *clearButton;
 @property (nonatomic, retain) IBOutlet UILabel                     *stopWatchLabel;
 @property (nonatomic, retain) IBOutlet UILabel                     *statusLabel;
+
 
 
 
@@ -87,6 +89,8 @@
 - (IBAction)photoLibraryAction:(id)sender;
 - (IBAction)cameraAction:(id)sender;
 - (IBAction)sendImage:(id)sender;
+- (IBAction)clear:(id)sender;
+
 
 @end
 

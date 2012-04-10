@@ -63,7 +63,6 @@
     UIBarButtonItem *startStopButton;
     UIBarButtonItem *timedButton;
     UIBarButtonItem *cancelButton;
-    UIBarButtonItem *sendButton;        // mine
     
     NSTimer *tickTimer;
     NSTimer *cameraTimer;
@@ -72,6 +71,7 @@
 
 @property (nonatomic, assign) id <OverlayViewControllerDelegate> delegate;
 @property (nonatomic, retain) UIImagePickerController *imagePickerController;
+//@property (nonatomic, retain) 
 
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *takePictureButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *startStopButton;
@@ -89,7 +89,6 @@
 - (IBAction)takePhoto:(id)sender;
 - (IBAction)startStop:(id)sender;
 - (IBAction)timedTakePhoto:(id)sender;
-- (IBAction)send:(id)sender;                      // mine
 
 @end
 

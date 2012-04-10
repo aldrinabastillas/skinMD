@@ -10,8 +10,11 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>iPhoneIcon_Small.png</string>
-		<string>iPhoneIcon_Big.png</string>
+		<string>skinMD(57).png</string>
+		<string>skinMD(114).png</string>
+		<string>Default@2x.png</string>
+		<string>Default.png</string>
+		<string>Default@2x.png</string>
 	</array>
 	<key>CFBundleIcons</key>
 	<dict>
@@ -19,8 +22,11 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>iPhoneIcon_Small.png</string>
-				<string>iPhoneIcon_Big.png</string>
+				<string>skinMD(57).png</string>
+				<string>skinMD(114).png</string>
+				<string>Default@2x.png</string>
+				<string>Default.png</string>
+				<string>Default@2x.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<false/>

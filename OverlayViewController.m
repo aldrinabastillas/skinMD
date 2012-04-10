@@ -120,13 +120,14 @@ enum
             // setup our custom overlay view for the camera
             //
             // ensure that our custom view's frame fits within the parent frame
-            CGRect overlayViewFrame = self.imagePickerController.cameraOverlayView.frame;
-            CGRect newFrame = CGRectMake(0.0,
-                                         CGRectGetHeight(overlayViewFrame) -
-                                         self.view.frame.size.height - 10.0,
-                                         CGRectGetWidth(overlayViewFrame),
-                                         self.view.frame.size.height + 10.0);
-            self.view.frame = newFrame;
+//            CGRect overlayViewFrame = self.imagePickerController.cameraOverlayView.frame;
+//            CGRect newFrame = CGRectMake(0.0,
+//                                         CGRectGetHeight(overlayViewFrame) -
+//                                         self.view.frame.size.height - 10.0,
+//                                         CGRectGetWidth(overlayViewFrame),
+//                                         self.view.frame.size.height + 10.0);
+//            self.view.frame = newFrame;
+            self.view.backgroundColor = [UIColor clearColor];
             [self.imagePickerController.cameraOverlayView addSubview:self.view];
         }
     }
@@ -301,15 +302,6 @@ enum
     [self.delegate didFinishWithCamera];    // tell our delegate we are finished with the picker
 }
 
-
-
-#pragma mark -
-#pragma mark Send Button Actions
-
-- (IBAction)send:(id)sender
-{
-
-}
 
 @end
 
