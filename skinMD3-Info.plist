@@ -10,11 +10,11 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>skinMD(57).png</string>
-		<string>skinMD(114).png</string>
-		<string>Default@2x.png</string>
 		<string>Default.png</string>
 		<string>Default@2x.png</string>
+		<string>skinMD(114).png</string>
+		<string>iPhoneIcon_Small.png</string>
+		<string>iPhoneIcon_Big.png</string>
 	</array>
 	<key>CFBundleIcons</key>
 	<dict>
@@ -22,14 +22,14 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>skinMD(57).png</string>
-				<string>skinMD(114).png</string>
-				<string>Default@2x.png</string>
 				<string>Default.png</string>
 				<string>Default@2x.png</string>
+				<string>skinMD(114).png</string>
+				<string>iPhoneIcon_Small.png</string>
+				<string>iPhoneIcon_Big.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
-			<false/>
+			<true/>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
@@ -50,6 +50,8 @@
 	<true/>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>
+	<key>UIPrerenderedIcon</key>
+	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

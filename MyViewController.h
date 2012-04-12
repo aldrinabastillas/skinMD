@@ -68,6 +68,7 @@
     NSURLConnection *           _connection;
     NSString *                  _filePath;
     NSOutputStream *            _fileStream;
+    NSURL *                     _resultLink;
 
 }
 
@@ -79,6 +80,7 @@
 @property (nonatomic, retain) NSMutableArray                       *capturedImages;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem             *sendButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem             *clearButton;
+@property (nonatomic, retain) IBOutlet UIButton                    *linkButton;
 @property (nonatomic, retain) IBOutlet UILabel                     *stopWatchLabel;
 @property (nonatomic, retain) IBOutlet UILabel                     *statusLabel;
 
@@ -90,6 +92,7 @@
 - (IBAction)cameraAction:(id)sender;
 - (IBAction)sendImage:(id)sender;
 - (IBAction)clear:(id)sender;
+- (IBAction)openLink:(id)sender;
 
 
 @end

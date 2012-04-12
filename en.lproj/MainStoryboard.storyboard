@@ -15,7 +15,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" image="skinMD(Load).png" id="BBX-PE-2bG">
+                            <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" image="Default.png" id="BBX-PE-2bG">
                                 <rect key="frame" x="0.0" y="-73" width="320" height="489"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -100,7 +100,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="stopWatchLabel" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="8" id="Q5J-pG-Vuk">
-                                <rect key="frame" x="246" y="307" width="66" height="16"/>
+                                <rect key="frame" x="246" y="302" width="66" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -117,6 +117,21 @@
                                 <rect key="frame" x="142" y="117" width="37" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="nCL-8l-OmA">
+                                <rect key="frame" x="77" y="257" width="167" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" image="WebMD.png">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="openLink:" destination="5Gn-qU-epg" eventType="touchUpInside" id="Aoc-Cx-0Uv"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.058823529409999999" green="0.71216354930000003" blue="0.43433508209999999" alpha="1" colorSpace="deviceRGB"/>
                         <accessibility key="accessibilityConfiguration">
@@ -128,6 +143,7 @@
                         <outlet property="activityIndicator" destination="bPO-UC-ajg" id="Dr2-pN-HTj"/>
                         <outlet property="clearButton" destination="aQY-8z-LMb" id="W4a-c5-CkM"/>
                         <outlet property="imageView" destination="tcx-dN-NOJ" id="XIg-me-Ds4"/>
+                        <outlet property="linkButton" destination="nCL-8l-OmA" id="6Yz-Nz-Nyg"/>
                         <outlet property="myToolbar" destination="mZZ-aT-bSd" id="CuP-ev-KMJ"/>
                         <outlet property="sendButton" destination="i5T-oU-Zo7" id="66Q-Tq-ww4"/>
                         <outlet property="statusLabel" destination="gea-u8-KVy" id="C08-IX-aaY"/>
@@ -199,11 +215,11 @@ After taking a picture of your skin, you must send it to be analyzed on our serv
             </objects>
             <point key="canvasLocation" x="568" y="467"/>
         </scene>
-        <!--View Controller - Help Screen-->
+        <!--Help Screen-->
         <scene sceneID="pd8-jj-6He">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Na0-AC-ooh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="E58-kz-YzO" sceneMemberID="viewController">
+                <viewController id="E58-kz-YzO" userLabel="Help Screen" sceneMemberID="viewController">
                     <view key="view" opaque="NO" contentMode="scaleToFill" id="7hr-3M-0tY">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -231,7 +247,7 @@ After taking a picture of your skin, you must send it to be analyzed on our serv
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2: Place a Penny near the skin spot in question and line up the Penny with the overlay" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="10" id="6rg-5R-aux">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2: Place a Penny near the skin spot in question, line up the Penny with the overlay, then remove it" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="10" id="6rg-5R-aux">
                                 <rect key="frame" x="8" y="166" width="292" height="91"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -267,9 +283,10 @@ After taking a picture of your skin, you must send it to be analyzed on our serv
         </scene>
     </scenes>
     <resources>
+        <image name="Default.png" width="320" height="480"/>
         <image name="Help.png" width="30" height="30"/>
+        <image name="WebMD.png" width="201" height="48"/>
         <image name="post.png" width="16" height="16"/>
-        <image name="skinMD(Load).png" width="320" height="480"/>
     </resources>
     <classes>
         <class className="MyViewController" superclassName="UIViewController">
@@ -277,11 +294,13 @@ After taking a picture of your skin, you must send it to be analyzed on our serv
             <relationships>
                 <relationship kind="action" name="cameraAction:"/>
                 <relationship kind="action" name="clear:"/>
+                <relationship kind="action" name="openLink:"/>
                 <relationship kind="action" name="photoLibraryAction:"/>
                 <relationship kind="action" name="sendImage:"/>
                 <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="clearButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="linkButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="myToolbar" candidateClass="UIToolbar"/>
                 <relationship kind="outlet" name="sendButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="statusLabel" candidateClass="UILabel"/>

@@ -58,6 +58,7 @@
 @property (nonatomic, readonly) BOOL              isReceiving;
 @property (nonatomic, retain)   NSURLConnection * connection;
 @property (nonatomic, copy)     NSString *        filePath;
+@property (nonatomic, copy)     NSURL *           resultLink;
 @property (nonatomic, retain)   NSOutputStream *  fileStream;
 
 @end
@@ -80,11 +81,17 @@
     self.capturedImages = [NSMutableArray array];
     self.sendButton.possibleTitles = [NSSet setWithObjects:@"Send", @"Sent !", @"Cancel", nil];
     self.sendButton.enabled = NO;
+    
     self.clearButton.enabled = NO;
-    self.stopWatchLabel.text = @"";
-    self.statusLabel.text = @"To start, take a picture using the camera or select a picture from the roll";
+    
+    self.linkButton.hidden = YES;
     self.activityIndicator.hidden = YES;
     self.imageView.image = nil;
+    
+//    self.stopWatchLabel.text = @"";
+    self.stopWatchLabel.hidden = YES;
+    self.statusLabel.text = @"To start, take a picture using the camera or select a picture from the roll";
+
 
 }
 
@@ -96,6 +103,7 @@
     self.capturedImages = nil;
     self.sendButton = nil;
     self.clearButton = nil;
+    self.linkButton = nil;
     self.stopWatchLabel = nil;
     self.statusLabel = nil;
     self.activityIndicator = nil;
@@ -109,6 +117,7 @@
 	[capturedImages release];
     [sendButton release];
     [clearButton release];
+    [linkButton release];
     [stopWatchLabel release];
     [statusLabel release];
     [activityIndicator release];
@@ -120,6 +129,7 @@
 
 @synthesize sendButton           = sendButton;
 @synthesize clearButton          = clearButton;
+@synthesize linkButton           = linkButton;
 @synthesize stopWatchLabel       = stopWatchLabel;
 @synthesize statusLabel          = statusLabel;
 @synthesize activityIndicator    = activityIndicator;
@@ -131,6 +141,11 @@
 - (IBAction)clear:(id)sender
 {
     [self viewDidLoad];
+}
+
+- (IBAction)openLink:(id)sender
+{
+    [[UIApplication sharedApplication] openURL:self.resultLink];
 }
 
 - (void)showImagePicker:(UIImagePickerControllerSourceType)sourceType
@@ -179,7 +194,7 @@
     {
         [self showImagePicker:UIImagePickerControllerSourceTypeCamera];
         
-        sleep(0.4);
+        [NSThread sleepForTimeInterval:0.4];
         self.sendButton.enabled = YES;
         self.sendButton.title = @"Send";         
         self.statusLabel.text = @"Hit Send !";
@@ -205,7 +220,6 @@
     [self.activityIndicator startAnimating];
     self.statusLabel.text = @"";
 
-    if (self.imageView.image != nil){
     imageName = [NSString stringWithFormat:@"imageTime_%qu.jpg" , [[NSDate date] timeIntervalSince1970]];
     
     // Create the stop watch timer that fires every 0.1 ms
@@ -230,7 +244,7 @@
         
     [postRequest setCompletionBlock:^{
         self.sendButton.title = @"Sent !";  
-        
+        [NSThread sleepForTimeInterval:10.0];
         [self getResult];
         
     }];
@@ -250,17 +264,7 @@
         
            
     [postRequest startAsynchronous]; 
-        
-    }
-    else{
-        UIAlertView *newView = [[UIAlertView alloc] initWithTitle:nil 
-                                                    message:@"Take or Select Picture First"
-                                                    delegate:nil 
-                                                    cancelButtonTitle:@"Close" 
-                                                    otherButtonTitles:nil];
-        [newView show];
-        [newView release];        
-    }  
+         
 }
 
 - (void)updateTimer
@@ -284,6 +288,7 @@
 @synthesize connection    = _connection;
 @synthesize fileStream    = _fileStream;
 @synthesize filePath      = _filePath;
+@synthesize resultLink    = _resultLink;
 
 
 - (BOOL)isReceiving
@@ -326,27 +331,82 @@
     
 }
 
-- (void)_receiveDidStopWithStatus:(NSString *)statusString   // ***** last get method block 
+- (void)_receiveDidStopWithStatus:(NSString *)statusString                // ***** last get method block ******
 {
     
     [stopWatchTimer invalidate];
     stopWatchTimer = nil;
     [self updateTimer]; 
     
-    if (statusString == nil) {
-        assert(self.filePath != nil);
-        
-        self.imageView.image = [UIImage imageWithContentsOfFile:self.filePath];
-//        self.statusLabel.text = self.filePath;
-//        NSLog(self.filePath);
+    if(statusString == nil){   
+        [self showResult]; 
     }
-//
-//    self.statusLabel.text = statusString;
+    else{
+        self.statusLabel.text = statusString;
+    }
+
+        
     self.sendButton.title = @"Send";
     self.sendButton.enabled = NO;
     self.clearButton.enabled = YES;
     [self.activityIndicator stopAnimating];
     
+}
+
+
+- (void)showResult{
+    self.linkButton.hidden = NO;
+    NSLog(@"response ok");
+    
+    NSString *result = [NSString stringWithContentsOfFile:self.filePath encoding:NSUTF8StringEncoding error:nil];
+//    self.statusLabel.text = result;
+//    NSString *result = @"0";
+
+    NSString *notFound   = @"-1"; 
+    NSString *healthy    = @"0";
+    NSString *melanoma   = @"1";
+    NSString *bcc        = @"2";
+    NSString *either     = @"3";
+    NSString *unable     = @"4";
+    
+    
+    if ([result isEqualToString:notFound]){
+        NSLog(@"enter -1");
+        self.imageView.image = [UIImage imageNamed:@"Error.png"];        
+//        self.statusLabel.text = @"Not Found";
+        self.linkButton.hidden = YES;
+    } 
+    else{if ([result isEqualToString:healthy]){
+            NSLog(@"enter 0");
+            self.imageView.image = [UIImage imageNamed:@"Good Screen.png"];
+//            self.statusLabel.text = result;
+            self.resultLink = [NSURL URLWithString:@"http://www.m.webmd.com/healthy-beauty/tc/protecting-your-skin-from-the-sun-topic-overview"]; 
+        } 
+        else{if ([result isEqualToString:melanoma]){
+                NSLog(@"enter 1");
+                self.imageView.image = [UIImage imageNamed:@"Bad News (Melanoma).png"];
+//                self.statusLabel.text = result;
+                self.resultLink = [NSURL URLWithString:@"http://www.m.webmd.com/melanoma-skin-cancer/melanoma-guide/skin-cancer-melanoma-topic-overview"];
+            } 
+            else{if ([result isEqualToString:bcc]){
+                    NSLog(@"enter 2");
+                    self.imageView.image = [UIImage imageNamed:@"Bad News (BCC).png"];
+//                    self.statusLabel.text = result;
+                    self.resultLink = [NSURL URLWithString:@"http://www.m.webmd.com/melanoma-skin-cancer/basal-cell-carcinoma"];
+                } 
+                else{if ([result isEqualToString:either]){
+                        NSLog(@"enter 3");
+                        self.imageView.image = [UIImage imageNamed:@"Not Found.png"];
+//                        self.statusLabel.text = @"Bad News !!";
+                        self.resultLink = [NSURL URLWithString:@"http://www.m.webmd.com/melanoma-skin-cancer/skin-cancer"];
+                    }
+                    else{if ([result isEqualToString:unable]){
+                            NSLog(@"enter 4");
+                            self.imageView.image = [UIImage imageNamed:@"Not Found.png"];
+//                            self.statusLabel.text = @"unable to find";
+                            self.resultLink = [NSURL URLWithString:@"http://www.m.webmd.com/melanoma-skin-cancer/skin-cancer"];
+                        } }}}}}
+    NSLog(@"exited");
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveResponse:(NSURLResponse *)response
@@ -371,7 +431,7 @@
         if (contentTypeHeader == nil) {
             [self _stopReceiveWithStatus:@"No Content-Type!"];
         } else {
-            self.statusLabel.text = @"Response OK.";
+//            self.statusLabel.text = @"Response OK.";
         }
     }    
 }
