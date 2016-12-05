@@ -42,16 +42,16 @@ A three-column prediction array was used, with one column for melanoma, basal ce
 
 ## Results
 #### Melanoma
-##### Sensitivity: 68.17%
-##### Specificity: 79.96%
+* Sensitivity: 68.17%
+* Specificity: 79.96%
 
 #### Basal Cell Carcinoma
-##### Sensitivity: 77.08%
-##### Specificity: 97.85%
+* Sensitivity: 77.08%
+* Specificity: 97.85%
 
 #### Performance
-##### MATLAB Algorithm time: 0.82 +/- 0.01 seconds
-##### Phone to server, server to phone: 5.05 +/- 0.44 seconds
+* MATLAB Algorithm time: 0.82 +/- 0.01 seconds
+* Phone to server, server to phone: 5.05 +/- 0.44 seconds
 
 
 ## Files
