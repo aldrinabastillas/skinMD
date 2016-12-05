@@ -59,11 +59,12 @@ A three-column prediction array was used, with one column for melanoma, basal ce
 * [MyViewController.m](https://github.com/aldrinabastillas/skinMD/blob/master/MyViewController.m): View that sends the images to the server, receives and displays the results, and has the button to take the image.
 
 * [OverlayViewController.m](https://github.com/aldrinabastillas/skinMD/blob/master/OverlayViewController.m): Specialized camera screen with a timer and an overlay to scale the image correctly. Adapted from a tutorial from Apple.
+
 #### MATLAB
-* [process.m] (https://github.com/aldrinabastillas/skinMD/blob/master/MATLAB&20Code/process.m): Does the scoring for the prediction
-* [find_color.m] (https://github.com/aldrinabastillas/skinMD/blob/master/MATLAB&20Code/find_color.m): Splits the image into its RGB color channels and calculates its average and standard deviation.
-* [ABCD.m] (https://github.com/aldrinabastillas/skinMD/blob/master/MATLAB&20Code/ABCD.m): Calculates the features for Asymmetry, Border, Color, and Diameter. 
-* [HOG.m] (https://github.com/aldrinabastillas/skinMD/blob/master/MATLAB&20Code/HOG.m): Calculates a historgram of oriented gradients for the image.
+* [process.m] (https://github.com/aldrinabastillas/skinMD/blob/master/MATLAB%20Code/process.m): Does the scoring for the prediction
+* [find_color.m] (https://github.com/aldrinabastillas/skinMD/blob/master/MATLAB%20Code/find_color.m): Splits the image into its RGB color channels and calculates its average and standard deviation.
+* [ABCD.m] (https://github.com/aldrinabastillas/skinMD/blob/master/MATLAB%20Code/ABCD.m): Calculates the features for Asymmetry, Border, Color, and Diameter. 
+* [HOG.m] (https://github.com/aldrinabastillas/skinMD/blob/master/MATLAB%20Code/HOG.m): Calculates a historgram of oriented gradients for the image.
 
 #### Other 
 * For another overview summary, see [Final Presentation.pptx](https://github.com/aldrinabastillas/skinMD/blob/master/Documents/Final%20Presentation.pptx)
